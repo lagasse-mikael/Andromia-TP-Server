@@ -10,7 +10,7 @@ import pizzRoutes from './src/routes/pizzeria.route.js'
 
 // Middlewares
 import methodMiddleware from './src/middlewares/method.js';
-import errorMiddleware from'./src/middlewares/errors.js';
+import errorMiddleware from './src/middlewares/errors.js';
 
 database();
 
@@ -19,16 +19,15 @@ const app = express();
 app.use(express.json());
 app.use(methodMiddleware);
 
-app.get("/", (req, res) => 
-{
+app.get("/", (req, res) => {
     res.status(200);
     res.set("Content-Type", "text/plain");
     res.send("Initialisation du serveur");
 });
 
-app.use("/customers",customersRoutes)
+app.use("/customers", customersRoutes)
 //app.use("/orders",ordersRoutes)
-app.use("/pizzerias",pizzRoutes)
+app.use("/pizzerias", pizzRoutes)
 
-app.use (errorMiddleware);
+app.use(errorMiddleware);
 export default app;
