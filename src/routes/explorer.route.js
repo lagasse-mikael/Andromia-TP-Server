@@ -78,14 +78,6 @@ class ExplorerRoutes {
             }
 
             delete possibleUser._id
-
-<<<<<<< HEAD
-            res.status(202).json(possibleUser)
-=======
-            const possibleUser = await explorerRepo.connect(explorerInfos)
-            
-            res.status(200).json(possibleUser)
->>>>>>> 8d3f3daad555487bce6416b8d0ff9e676bef4346
         } catch (err) {
             return next(err)
         }
