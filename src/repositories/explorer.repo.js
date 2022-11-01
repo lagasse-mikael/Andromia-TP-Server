@@ -38,6 +38,16 @@ class ExplorerRepository {
 
         return explorer
     }
+
+    transformObject(explorer) {
+        explorer = explorer.toObject()
+        delete explorer.email;
+        explorer.href = `${process.env.BASE_URL}explorers/${explorer._id}`
+
+        delete explorer._id;
+        
+        return explorer
+    }
 }
 
 export default new ExplorerRepository()

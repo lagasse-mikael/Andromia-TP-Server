@@ -20,16 +20,18 @@ class ExplorerRoutes {
         try {
             let explorers = await explorerRepo.retrieveAll()
 
+            explorers = explorers.map(explorer => explorerRepo.transformObject(explorer))
+
             res.status(httpStatus.OK).json(explorers)
         } catch (err) {
             return next(err)
         }
     }
 
-    // mettre les href pour l'explorateur
     async getOne(req, res, next) {
         try {
             let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
+            explorer = explorerRepo.transformObject(explorer)
 
             res.status(httpStatus.OK).json(explorer)
         } catch (err) {
@@ -82,7 +84,6 @@ class ExplorerRoutes {
             return next(err)
         }
     }
-
 }
 
 new ExplorerRoutes()
