@@ -1,6 +1,6 @@
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 import Explorer from '../models/explorer.model.js';
-import daysjs from 'dayjs'
+import jwt from 'jsonwebtoken';
 
 class ExplorerRepository {
     async retrieveByID(explorerID) {
@@ -37,6 +37,13 @@ class ExplorerRepository {
         const explorer = await Explorer.findOne({ username: explorerInfos.username, password: explorerInfos.password })
 
         return explorer
+    }
+
+    generateTokens(email,userID) {
+        const access_token = jwt.sign({ email }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_LIFE, issuer: process.env.BASE_URL })
+        const refresh_token = jwt.sign({ userID }, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_LIFE, issuer: process.env.BASE_URL })
+    
+        return { access_token, refresh_token }
     }
 
     transformObject(explorer) {

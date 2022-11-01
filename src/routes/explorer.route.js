@@ -12,7 +12,7 @@ class ExplorerRoutes {
         router.get('/:explorerID/creatures', this.getExplorerCreatures)
         router.get('/:explorerID/elements', this.getExplorerElements)
 
-        router.post('/login', this.loginExplorer)
+        router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
     }
 
@@ -62,11 +62,23 @@ class ExplorerRoutes {
     async loginExplorer(req, res, next) {
         try {
             const explorerInfos = req.body
-            if(!explorerInfos.username || !explorerInfos.password) 
-                return res.status(400).json({"errorMessage" : 'Missing "usename" or "password" field.'})
+            if (!explorerInfos.username || !explorerInfos.password)
+                return res.status(400).json({ "errorMessage": 'Missing "usename" or "password" field.' })
 
-            const possibleUser = await explorerRepo.connect(explorerInfos)
-            
+            let possibleUser = await explorerRepo.connect(explorerInfos)
+
+            if (!possibleUser)
+                return res.status(404).json({ "errorMessage": 'User not found!' })
+
+            possibleUser = possibleUser.toObject()
+            const tokens = explorerRepo.generateTokens(possibleUser.email, possibleUser._id)
+
+            possibleUser.tokens = {
+                ...tokens
+            }
+
+            delete possibleUser._id
+
             res.status(202).json(possibleUser)
         } catch (err) {
             return next(err)

@@ -6,6 +6,7 @@ const explorationSchema = mongoose.Schema({
     affinity: { type: String, unique: false, required: true },
     vault: { type: mongoose.Types.ObjectId, unique: false, required: true },
     creature: { type: mongoose.Types.ObjectId, unique: false, required: true },
+    combat: { type: Object, unique: false, required: false }
 },
     {
         collection: 'explorations',
