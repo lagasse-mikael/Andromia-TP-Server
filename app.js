@@ -7,15 +7,17 @@ import database from "./src/libs/database.js";
 import explorerRoutes from './src/routes/explorer.route.js'
 
 // Middlewares
-import methodMiddleware from './src/middlewares/method.js';
+// import methodMiddleware from './src/middlewares/method.js';
 import errorMiddleware from './src/middlewares/errors.js';
+import cors from 'cors';
 
 database();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-app.use(methodMiddleware);
+// app.use(methodMiddleware);
 
 app.get("/", (req, res) => {
     res.status(200);

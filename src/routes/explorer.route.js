@@ -67,7 +67,7 @@ class ExplorerRoutes {
 
             const possibleUser = await explorerRepo.connect(explorerInfos)
             
-            res.status(202).json(possibleUser)
+            res.status(200).json(possibleUser)
         } catch (err) {
             return next(err)
         }
