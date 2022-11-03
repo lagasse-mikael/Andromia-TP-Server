@@ -78,6 +78,8 @@ class ExplorerRoutes {
             }
 
             delete possibleUser._id
+
+            res.status(httpStatus.OK).json(possibleUser)
         } catch (err) {
             return next(err)
         }
