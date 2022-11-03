@@ -32,6 +32,7 @@ class ExplorerRoutes {
     async getOne(req, res, next) {
         try {
             let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
+
             explorer = explorerRepo.transformObject(explorer)
 
             res.status(httpStatus.OK).json(explorer)
@@ -90,7 +91,8 @@ class ExplorerRoutes {
         try {
             const explorerBody = req.body
 
-            const newExplorerResponse = await explorerRepo.create(explorerBody)
+            let newExplorerResponse = await explorerRepo.create(explorerBody)
+            newExplorerResponse = explorerRepo.transformObject(newExplorerResponse)
 
             res.status(httpStatus.CREATED).json(newExplorerResponse)
         } catch (err) {
