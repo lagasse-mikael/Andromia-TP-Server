@@ -19,7 +19,7 @@ const guardRefreshToken = expressjwt({
     algorithms: ['HS256'],
     requestProperty: "refresh_token",
     getToken: req => {
-        return req.body.tokens.refresh_token
+        return req.body.refresh_token
     }
 })
 

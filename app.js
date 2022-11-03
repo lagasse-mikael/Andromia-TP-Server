@@ -11,6 +11,7 @@ import explorerRoutes from './src/routes/explorer.route.js'
 import errorMiddleware from './src/middlewares/errors.js';
 import cors from 'cors';
 import explorerRepo from "./src/repositories/explorer.repo.js";
+import { guardRefreshToken } from "./src/middlewares/authorization.jwt.js";
 
 database();
 
@@ -20,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 // app.use(methodMiddleware);
 
-app.get("/refresh", (req, res) => {
+app.post("/refresh",guardRefreshToken, (req, res) => {
     const refresh_token = req.body.refresh_token
     if(!refresh_token)
         return res.status(400).json({"errorMessage" : "Refresh token?"})
