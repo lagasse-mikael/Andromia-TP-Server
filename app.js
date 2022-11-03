@@ -19,8 +19,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-// app.use(methodMiddleware);
 
+// Tokens
 app.post("/refresh",guardRefreshToken, (req, res) => {
     const refresh_token = req.body.refresh_token
     if(!refresh_token)
@@ -35,6 +35,7 @@ app.post("/refresh",guardRefreshToken, (req, res) => {
     return res.status(200).json(tokens)
 });
 
+// Routes
 app.use("/explorers", explorerRoutes)
 
 app.use(errorMiddleware);

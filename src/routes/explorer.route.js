@@ -1,16 +1,17 @@
 import express, { response } from 'express';
 import HttpError from 'http-errors';
 import httpStatus from 'http-status';
+import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import explorerRepo from '../repositories/explorer.repo.js';
 
 const router = express.Router()
 
 class ExplorerRoutes {
     constructor() {
-        router.get('/', this.getAll)
-        router.get('/:explorerID', this.getOne)
-        router.get('/:explorerID/creatures', this.getExplorerCreatures)
-        router.get('/:explorerID/elements', this.getExplorerElements)
+        router.get('/', guardAuthJWT, this.getAll)
+        router.get('/:explorerID', guardAuthJWT,this.getOne)
+        router.get('/:explorerID/creatures', guardAuthJWT, this.getExplorerCreatures)
+        router.get('/:explorerID/elements', guardAuthJWT, this.getExplorerElements)
 
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)

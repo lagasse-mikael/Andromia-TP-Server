@@ -6,7 +6,8 @@ const guardAuthJWT = expressjwt({
     algorithms: ['HS256'],
     requestProperty: "access_token",
     getToken: req => {
-        return req.body.tokens.access_token
+        let access_token = req.headers.authorization.replace('Bearer ','')
+        return access_token
     },
     isRevoked: async (req, token) => {
         // Si le token n'est plus bon : on fait quoi?
