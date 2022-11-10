@@ -49,7 +49,7 @@ class ExplorerRepository {
     }
 
     async connect(explorerInfos) {
-        const explorer = await Explorer.findOne({ username: explorerInfos.username, password: explorerInfos.password })
+        const explorer = await Explorer.findOne({ username: explorerInfos.username, password: explorerInfos.password }).populate('creatures').populate('explorations')
 
         return explorer
     }
