@@ -5,6 +5,7 @@ import database from "./src/libs/database.js";
 
 // Repos
 import explorerRoutes from './src/routes/explorer.route.js'
+import creatureRoutes from './src/routes/creature.route.js'
 
 // Middlewares
 // import methodMiddleware from './src/middlewares/method.js';
@@ -37,6 +38,7 @@ app.post("/refresh",guardRefreshToken, (req, res) => {
 
 // Routes
 app.use("/explorers", explorerRoutes)
+app.use("/creatures", creatureRoutes)
 
 app.use(errorMiddleware);
 export default app;

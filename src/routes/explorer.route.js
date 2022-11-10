@@ -10,7 +10,7 @@ const router = express.Router()
 class ExplorerRoutes {
     constructor() {
         router.get('/', guardAuthJWT, this.getAll)
-        // router.get('/:explorerID', guardAuthJWT,this.getOne)
+        router.get('/getOne/:explorerID', guardAuthJWT,this.getOne)
         router.get('/creatures', guardAuthJWT, this.getExplorerCreatures)
         router.get('/vault', guardAuthJWT, this.getExplorerVault)
         router.get('/explorations', guardAuthJWT, this.getExplorerExplorations)
