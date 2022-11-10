@@ -4,13 +4,18 @@ import jwt from 'jsonwebtoken';
 
 class ExplorerRepository {
     async retrieveByID(explorerID) {
-        const explorer = await Explorer.findById(explorerID).populate('creatures').populate('explorations')
+        const explorer = await Explorer.findById(explorerID).populate('creatures').populate({
+            path: 'explorations',
+            populate: {
+                path: 'creature'
+            }
+        })
 
         return explorer
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        let creatures = await Explorer.findOne({email : explorerEmail}).populate('creatures').select('creatures')
+        let creatures = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
 
         creatures = creatures.toObject();
         delete creatures._id;
@@ -19,17 +24,17 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerVault(explorerEmail) {
-        let vault = await Explorer.findOne({email : explorerEmail}).select('vault')
-        
+        let vault = await Explorer.findOne({ email: explorerEmail }).select('vault')
+
         vault = vault.toObject();
         delete vault._id;
-        
+
         return vault
     }
 
     async retrieveExplorerExplorations(explorerEmail) {
-        let explorations = await Explorer.findOne({email : explorerEmail}).populate('explorations').select('explorations')
-        
+        let explorations = await Explorer.findOne({ email: explorerEmail }).populate('explorations').select('explorations')
+
         explorations = explorations.toObject();
         delete explorations._id;
 
@@ -49,15 +54,20 @@ class ExplorerRepository {
     }
 
     async connect(explorerInfos) {
-        const explorer = await Explorer.findOne({ username: explorerInfos.username, password: explorerInfos.password }).populate('creatures').populate('explorations')
+        const explorer = await Explorer.findOne({ username: explorerInfos.username, password: explorerInfos.password }).populate('creatures').populate({
+            path: 'explorations',
+            populate: {
+                path: 'creature'
+            }
+        })
 
         return explorer
     }
 
-    generateTokens(email,userID) {
+    generateTokens(email, userID) {
         const access_token = jwt.sign({ email }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_LIFE, issuer: process.env.BASE_URL })
         const refresh_token = jwt.sign({ userID }, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_LIFE, issuer: process.env.BASE_URL })
-    
+
         return { access_token, refresh_token }
     }
 
@@ -67,7 +77,7 @@ class ExplorerRepository {
         explorer.href = `${process.env.BASE_URL}explorers/${explorer._id}`
 
         delete explorer._id;
-        
+
         return explorer
     }
 }
