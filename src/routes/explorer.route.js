@@ -10,8 +10,8 @@ class ExplorerRoutes {
     constructor() {
         router.get('/', guardAuthJWT, this.getAll)
         router.get('/:explorerID', guardAuthJWT,this.getOne)
-        router.get('/:explorerID/creatures', guardAuthJWT, this.getExplorerCreatures)
-        router.get('/:explorerID/elements', guardAuthJWT, this.getExplorerElements)
+        router.get('/creatures', guardAuthJWT, this.getExplorerCreatures)
+        router.get('/elements', guardAuthJWT, this.getExplorerElements)
 
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
@@ -43,9 +43,10 @@ class ExplorerRoutes {
 
     async getExplorerCreatures(req, res, next) {
         try {
-            const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(req.params.explorerID)
+            const explorerEmail = req.header.access_token.email
+            // const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(explorerEmail)
 
-            res.status(httpStatus.OK).json(explorerCreatures)
+            res.status(httpStatus.OK).json(explorerEmail)
         } catch (err) {
             return next(err)
         }
@@ -92,8 +93,12 @@ class ExplorerRoutes {
             const explorerBody = req.body
 
             let newExplorerResponse = await explorerRepo.create(explorerBody)
-            newExplorerResponse = explorerRepo.transformObject(newExplorerResponse)
+            const tokens = explorerRepo.generateTokens(newExplorerResponse.email, newExplorerResponse._id)
+            newExplorerResponse.tokens = {
+                ...tokens
+            }
 
+            newExplorerResponse = explorerRepo.transformObject(newExplorerResponse)
             res.status(httpStatus.CREATED).json(newExplorerResponse)
         } catch (err) {
             return next(err)

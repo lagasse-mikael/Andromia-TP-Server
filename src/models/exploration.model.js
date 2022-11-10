@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
 const explorationSchema = mongoose.Schema({
-    explorateurId: { type: [mongoose.Types.ObjectId], unique: false, required: false },
     explorationDate: { type: Date, unique: false, required: true },
     destination: { type: String, unique: false, required: true },
     affinity: { type: String, unique: false, required: true },

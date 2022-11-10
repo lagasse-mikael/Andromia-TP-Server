@@ -1,0 +1,33 @@
+[{
+    "stats": {
+        "life": 28,
+        "speed": 5,
+        "power": 7,
+        "shield": 0
+    },
+    "crypto": {
+        "hash": "c37798eef299481fe2a5172bc6a53fa10b40c5ea1966fbd654d4734645b2cad0",
+        "signature": "eyJhbGciOiJFUzI1NiIsImtpZCI6ImNOdWtWQ1MyVHNIRWs1bjBobGd4MHdiay1La1psQkFIWHpLZk56dzdva28ifQ.eyJ1dWlkIjoiYjA3YTkzYzQtMzNlYS00ZmU5LTlmY2MtYzYzNTllYzE5OTg4IiwiaGFzaCI6ImMzNzc5OGVlZjI5OTQ4MWZlMmE1MTcyYmM2YTUzZmExMGI0MGM1ZWExOTY2ZmJkNjU0ZDQ3MzQ2NDViMmNhZDAifQ.Xcd07_qqMiWVsTBXTaSD_8LZqIDQFF3uL859gOdxwANlVs82nGTNFb-z29IdIb4UQnZi_h00bd-0F0aJw6Cvmg"
+    },
+    "books": [
+        "pink",
+        "yellow"
+    ],
+    "kernel": [
+        "Ex",
+        "Ex",
+        "B",
+        "Ex",
+        "Q"
+    ],
+    "archiveIndex": 1,
+    "name": "Archer",
+    "uuid": "b07a93c4-33ea-4fe9-9fcc-c6359ec19988",
+    "affinity": "energy",
+    "essence": 93,
+    "asset": "https://assets.andromia.science/creatures/1.png",
+    "createdAt": "2022-11-10T15:52:28.760Z",
+    "updatedAt": "2022-11-10T15:52:28.760Z",
+    "href": "https://api.andromia.science/creatures/b07a93c4-33ea-4fe9-9fcc-c6359ec19988",
+    "expireAt": "2022-11-17T00:00:00.000Z"
+}]

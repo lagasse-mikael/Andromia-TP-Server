@@ -1,0 +1,36 @@
+[{
+    "explorationDate": "2022-11-10T15:52:28.755Z",
+    "destination": "Tour du Fauconuit",
+    "affinity": "energy",
+    "vault": {
+        "inox": 22,
+        "elements": [
+            {
+                "element": "Sm",
+                "quantity": 1
+            },
+            {
+                "element": "E",
+                "quantity": 2
+            },
+            {
+                "element": "L",
+                "quantity": 9
+            },
+            {
+                "element": "No",
+                "quantity": 8
+            },
+            {
+                "element": "Q",
+                "quantity": 7
+            },
+            {
+                "element": "Z",
+                "quantity": 5
+            }
+        ]
+    },
+    "creature": "",
+    "combat":{}
+}]
