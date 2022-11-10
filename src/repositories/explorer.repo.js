@@ -10,9 +10,9 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        const creatures = await Explorer.findOne({email : explorerEmail})
+        const explorer = await Explorer.findOne({email : explorerEmail}).populate('creatures')
 
-        return creatures
+        return explorer.creatures
     }
 
     async retrieveExplorerElements(explorerID) {

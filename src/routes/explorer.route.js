@@ -3,13 +3,14 @@ import HttpError from 'http-errors';
 import httpStatus from 'http-status';
 import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import explorerRepo from '../repositories/explorer.repo.js';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router()
 
 class ExplorerRoutes {
     constructor() {
         router.get('/', guardAuthJWT, this.getAll)
-        router.get('/:explorerID', guardAuthJWT,this.getOne)
+        // router.get('/:explorerID', guardAuthJWT,this.getOne)
         router.get('/creatures', guardAuthJWT, this.getExplorerCreatures)
         router.get('/elements', guardAuthJWT, this.getExplorerElements)
 
@@ -43,10 +44,11 @@ class ExplorerRoutes {
 
     async getExplorerCreatures(req, res, next) {
         try {
-            const explorerEmail = req.header.access_token.email
-            // const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(explorerEmail)
+            const user_infos = jwt.decode(req.headers.authorization.split(' ')[1])
+            
+            const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(user_infos.email)
 
-            res.status(httpStatus.OK).json(explorerEmail)
+            res.status(httpStatus.OK).json(explorerCreatures)
         } catch (err) {
             return next(err)
         }
