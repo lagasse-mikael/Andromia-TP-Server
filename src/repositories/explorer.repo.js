@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 class ExplorerRepository {
     async retrieveByID(explorerID) {
-        const explorer = await Explorer.findById(explorerID)
+        const explorer = await Explorer.findById(explorerID).populate('creatures').populate('explorations')
 
         return explorer
     }
