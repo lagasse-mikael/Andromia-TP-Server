@@ -45,9 +45,7 @@ class ExplorerRoutes {
 
     async getExplorerCreatures(req, res, next) {
         try {
-            const user_infos = jwt.decode(req.headers.authorization.split(' ')[1])
-            
-            const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(user_infos.email)
+            const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(req.auth.email)
 
             res.status(httpStatus.OK).json(explorerCreatures)
         } catch (err) {
@@ -57,9 +55,7 @@ class ExplorerRoutes {
 
     async getExplorerVault(req, res, next) {
         try {
-            const user_infos = jwt.decode(req.headers.authorization.split(' ')[1])
-            
-            const explorerElements = await explorerRepo.retrieveExplorerVault(user_infos.email)
+            const explorerElements = await explorerRepo.retrieveExplorerVault(req.auth.email)
 
             res.status(httpStatus.OK).json(explorerElements)
         } catch (err) {
@@ -69,9 +65,7 @@ class ExplorerRoutes {
 
     async getExplorerExplorations(req, res, next) {
         try {
-            const user_infos = jwt.decode(req.headers.authorization.split(' ')[1])
-            
-            const explorerExplorations = await explorerRepo.retrieveExplorerExplorations(user_infos.email)
+            const explorerExplorations = await explorerRepo.retrieveExplorerExplorations(req.auth.email)
 
             res.status(httpStatus.OK).json(explorerExplorations)
         } catch (err) {
