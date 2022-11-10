@@ -10,15 +10,30 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        const explorer = await Explorer.findOne({email : explorerEmail}).populate('creatures')
+        let creatures = await Explorer.findOne({email : explorerEmail}).populate('creatures').select('creatures')
 
-        return explorer.creatures
+        creatures = creatures.toObject();
+        delete creatures._id;
+
+        return creatures
     }
 
-    async retrieveExplorerElements(explorerID) {
-        const elements = await Explorer.findById(explorerID).select('elements')
+    async retrieveExplorerVault(explorerEmail) {
+        let vault = await Explorer.findOne({email : explorerEmail}).select('vault')
+        
+        vault = vault.toObject();
+        delete vault._id;
+        
+        return vault
+    }
 
-        return elements
+    async retrieveExplorerExplorations(explorerEmail) {
+        let explorations = await Explorer.findOne({email : explorerEmail}).populate('explorations').select('explorations')
+        
+        explorations = explorations.toObject();
+        delete explorations._id;
+
+        return explorations
     }
 
     async retrieveAll() {

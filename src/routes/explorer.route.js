@@ -12,7 +12,8 @@ class ExplorerRoutes {
         router.get('/', guardAuthJWT, this.getAll)
         // router.get('/:explorerID', guardAuthJWT,this.getOne)
         router.get('/creatures', guardAuthJWT, this.getExplorerCreatures)
-        router.get('/elements', guardAuthJWT, this.getExplorerElements)
+        router.get('/vault', guardAuthJWT, this.getExplorerVault)
+        router.get('/explorations', guardAuthJWT, this.getExplorerExplorations)
 
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
@@ -54,11 +55,25 @@ class ExplorerRoutes {
         }
     }
 
-    async getExplorerElements(req, res, next) {
+    async getExplorerVault(req, res, next) {
         try {
-            const explorerElements = await explorerRepo.retrieveExplorerElements(req.params.explorerID)
+            const user_infos = jwt.decode(req.headers.authorization.split(' ')[1])
+            
+            const explorerElements = await explorerRepo.retrieveExplorerVault(user_infos.email)
 
             res.status(httpStatus.OK).json(explorerElements)
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    async getExplorerExplorations(req, res, next) {
+        try {
+            const user_infos = jwt.decode(req.headers.authorization.split(' ')[1])
+            
+            const explorerExplorations = await explorerRepo.retrieveExplorerExplorations(user_infos.email)
+
+            res.status(httpStatus.OK).json(explorerExplorations)
         } catch (err) {
             return next(err)
         }
