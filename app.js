@@ -2,11 +2,13 @@
 import dayjs from "dayjs";
 import express from "express";
 import database from "./src/libs/database.js";
+import axios from "axios";
 
 // Repos
 import explorerRoutes from './src/routes/explorer.route.js'
 import creatureRoutes from './src/routes/creature.route.js'
 import elementRoutes from './src/routes/element.route.js'
+import explorationRoutes from './src/routes/exploration.route.js'
 
 // Middlewares
 // import methodMiddleware from './src/middlewares/method.js';
@@ -21,6 +23,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(axios);
 
 // Tokens
 app.post("/refresh",guardRefreshToken, (req, res) => {
@@ -41,6 +44,7 @@ app.post("/refresh",guardRefreshToken, (req, res) => {
 app.use("/explorers", explorerRoutes)
 app.use("/creatures", creatureRoutes)
 app.use("/elements", elementRoutes)
+app.use("/explorations", explorationRoutes)
 
 app.use(errorMiddleware);
 export default app;
