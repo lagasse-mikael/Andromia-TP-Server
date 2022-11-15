@@ -29,7 +29,7 @@ class ExplorerRepository {
         vault = vault.toObject();
         delete vault._id;
 
-        return vault
+        return vault.vault
     }
 
     async retrieveExplorerExplorations(explorerEmail) {
