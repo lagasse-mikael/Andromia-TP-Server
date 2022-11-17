@@ -23,7 +23,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(axios);
+// app.use(axios);
 
 // Tokens
 app.post("/refresh",guardRefreshToken, (req, res) => {
