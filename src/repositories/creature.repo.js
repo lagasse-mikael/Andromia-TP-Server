@@ -15,6 +15,10 @@ class CreatureRepository {
     }
 
     async createOne(creature) {
+        // On considere que l'on cree une creature apres chaque exploration
+        // donc le href et tout autre variable cree par Mongo sera la NECESSAIREMENT, sinon c'est pas trop grave.
+        delete creature.href
+
         const creatureMongo = await Creature.create(creature)
 
         return creatureMongo

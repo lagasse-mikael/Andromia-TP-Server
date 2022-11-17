@@ -5,6 +5,8 @@ import axios from 'axios';
 
 import creatureRepo from '../repositories/creature.repo.js'
 import explorerRepo from '../repositories/explorer.repo.js'
+import explorationRepo from '../repositories/exploration.repo.js';
+import mongo from 'mongoose';
 
 const router = express.Router()
 
@@ -85,20 +87,43 @@ class ExplorationRoutes {
         router.post('/', guardAuthJWT, this.postScannedExploraiton)
     }
 
+    // J'trouve ca sketch a lire donc j'ai commenter chaque etape.
     async postScannedExploraiton(req, res, next) {
         try {
+            // Check si on a un qr code dans le body.
             const portalKey = req.body.qrKey
+            if(!portalKey) return res.status(httpStatus.BAD_REQUEST).json({ "message": "Pas de code qr!" })
 
+            // On pogne une exploration du serveur selon le code.
             const explorationResponse = await axios.get(`https://api.andromia.science/portals/${portalKey}`)
+            
+            if (explorationResponse.status != 200 || !explorationResponse.data.creature) return res.status(500).json({"message":"Aucune creature associee a notre exploraiton, est-ce normale?"})
 
-            if (explorationResponse.status != 200) return explorationResponse
+            // On stock l'exploration et ses informations dans des variables.
+            let exploration = explorationResponse.data;
+            
+            const vaultExploration = exploration.vault;
+            let creatureExploration = await creatureRepo.createOne(exploration.creature);
 
-            const creatureExploration = explorationResponse.data.creature;
-            const vaultExploration = explorationResponse.data.vault;
+            // On met la creature et le combat (vide) comme il le faut selon la BD.
+            exploration.creature = creatureExploration._id
+            exploration.combat = {}
 
-            creatureRepo.createOne(creatureExploration)
+            // On cree l'exploration
+            exploration = await explorationRepo.createOne(exploration)
 
-            res.status(httpStatus.OK).json({ "message": "OK!" })
+            // Assign la creature a l'explorateur apres son combat. ( A DETERMINER )
+            // TODO
+
+            // On ajoute l'exploration au profil de l'utilisateur.
+            const explorateur = await explorerRepo.retrieveByEmail(req.auth.email)
+            explorateur.explorations.push(exploration._id)
+            
+            await explorerRepo.addFoundVaultToExplorersVault(explorateur,vaultExploration)
+            
+            explorateur.save()
+
+            res.status(httpStatus.OK).json(exploration)
         } catch (err) {
             return next(err)
         }

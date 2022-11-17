@@ -15,6 +15,12 @@ class ExplorerRepository {
         return explorer
     }
 
+    async retrieveByEmail(explorerEmail) {
+        const explorer = await Explorer.findOne({ email: explorerEmail })
+
+        return explorer
+    }
+
     async retrieveExplorerCreatures(explorerEmail) {
         let creatures = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
 
@@ -65,11 +71,40 @@ class ExplorerRepository {
         return explorer
     }
 
-    async assignCreatureToExplorer(creature,exporer) {
+    assignCreatureToExplorer(creature, explorer) {
         const creatureObjectId = creature._id;
 
         explorer.creatures.push(mongo.ObjectId(creatureObjectId))
         explorer.save();
+
+        return explorer
+    }
+
+    async addFoundVaultToExplorersVault(explorer, vaultExploration) {
+        
+        let explorerElements = [];
+        let explorerHadTheElement;
+        for (const found_element of vaultExploration.elements.values()) {
+            explorerHadTheElement = false;
+            for (const element of explorer.vault.elements.values()) {
+                if(found_element.element == element.element){
+                    element.quantity += found_element.quantity
+                    explorerElements.push(element)
+                    explorerHadTheElement = true;
+                }
+            }
+            if(!explorerHadTheElement){
+                explorer.vault.elements.push(found_element)
+                explorerElements.push(found_element)
+            }
+        }
+
+        await Explorer.findOneAndUpdate({_id:explorer._id},{
+            $set: {"vault.elements" : explorerElements},
+            $inc: {"vault.inox":vaultExploration.inox}
+        })
+
+        explorer.vault.inox += vaultExploration.inox
 
         return explorer
     }
