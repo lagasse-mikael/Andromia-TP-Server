@@ -9,10 +9,11 @@ const creatureSchema = mongoose.Schema({
     uuid: { type: String, unique: true, required: true },
     affinity: { type: String, unique: false, required: true },
     essence: { type: Number, unique: false, required: true },
+    archiveIndex: { type: Number, unique: false, required: true },
     asset: { type: String, unique: false, required: true },
     createdAt: { type: Date, unique: false, required: true },
     updatedAt: { type: Date, unique: false, required: true },
-    expiresAt: { type: Date, unique: false, required: true }
+    expireAt: { type: Date, unique: false, required: true }
 },
     {
         collection: 'creatures',
