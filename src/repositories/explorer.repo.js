@@ -1,6 +1,7 @@
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 import Explorer from '../models/explorer.model.js';
 import jwt from 'jsonwebtoken';
+import mongo from 'mongoose';
 
 class ExplorerRepository {
     async retrieveByID(explorerID) {
@@ -60,6 +61,15 @@ class ExplorerRepository {
                 path: 'creature'
             }
         })
+
+        return explorer
+    }
+
+    async assignCreatureToExplorer(creature,exporer) {
+        const creatureObjectId = creature._id;
+
+        explorer.creatures.push(mongo.ObjectId(creatureObjectId))
+        explorer.save();
 
         return explorer
     }

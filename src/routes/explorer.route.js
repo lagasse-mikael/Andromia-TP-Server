@@ -34,7 +34,7 @@ class ExplorerRoutes {
     async getOne(req, res, next) {
         try {
             let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
-
+            
             explorer = explorerRepo.transformObject(explorer)
 
             res.status(httpStatus.OK).json(explorer)

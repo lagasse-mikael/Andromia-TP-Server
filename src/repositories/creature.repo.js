@@ -14,6 +14,12 @@ class CreatureRepository {
         return creatures
     }
 
+    async createOne(creature) {
+        const creatureMongo = await Creature.create(creature)
+
+        return creatureMongo
+    }
+
     transformObject(creature) {
         creature = creature.toObject()
         creature.href = `${process.env.BASE_URL}creatures/${creature._id}`
