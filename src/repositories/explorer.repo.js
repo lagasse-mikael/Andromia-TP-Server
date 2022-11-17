@@ -34,12 +34,17 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerExplorations(explorerEmail) {
-        let explorations = await Explorer.findOne({ email: explorerEmail }).populate('explorations').select('explorations')
+        let explorations = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
+            path: 'explorations',
+            populate: {
+                path: 'creature'
+            }
+        }).select('explorations')
 
         explorations = explorations.toObject();
         delete explorations._id;
-
-        return explorations
+        console.log(explorations.explorations)
+        return explorations.explorations
     }
 
     async retrieveAll() {
