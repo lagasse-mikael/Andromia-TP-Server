@@ -3,6 +3,9 @@ import httpStatus from 'http-status';
 import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import axios from 'axios';
 
+import creatureRepo from '../repositories/creature.repo.js'
+import explorerRepo from '../repositories/explorer.repo.js'
+
 const router = express.Router()
 
 const api_response = {
@@ -88,9 +91,12 @@ class ExplorationRoutes {
 
             const explorationResponse = await axios.get(`https://api.andromia.science/portals/${portalKey}`)
 
-            if(explorationResponse.status == 200){
-                // On commence ici prochaine fois
-            }
+            if (explorationResponse.status != 200) return explorationResponse
+
+            const creatureExploration = explorationResponse.data.creature;
+            const vaultExploration = explorationResponse.data.vault;
+
+            creatureRepo.createOne(creatureExploration)
 
             res.status(httpStatus.OK).json({ "message": "OK!" })
         } catch (err) {
