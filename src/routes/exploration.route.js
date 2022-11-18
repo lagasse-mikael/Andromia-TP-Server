@@ -125,6 +125,7 @@ class ExplorationRoutes {
 
             res.status(httpStatus.OK).json(exploration)
         } catch (err) {
+            console.log(err)
             return next(err)
         }
     }

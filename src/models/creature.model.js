@@ -5,7 +5,7 @@ const creatureSchema = mongoose.Schema({
     crypto: { type: Object, unique: false, required: true },
     books: { type: [Object], unique: false, required: true },
     kernel: { type: [Object], unique: false, required: true },
-    name: { type: String, unique: true, required: true },
+    name: { type: String, unique: false, required: true },
     uuid: { type: String, unique: true, required: true },
     affinity: { type: String, unique: false, required: true },
     essence: { type: Number, unique: false, required: true },
