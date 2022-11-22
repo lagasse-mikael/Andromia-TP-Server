@@ -22,12 +22,15 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        let creatures = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
+        let {creatures} = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
 
-        creatures = creatures.toObject();
-        delete creatures._id;
+        creatures = creatures.map(c => {
+            c.toObject()
+            delete c._id;
+            return c
+        })
 
-        return creatures.creatures
+        return creatures
     }
 
     async retrieveExplorerVault(explorerEmail) {

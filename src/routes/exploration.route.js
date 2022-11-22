@@ -98,7 +98,7 @@ class ExplorationRoutes {
             const explorationResponse = await axios.get(`https://api.andromia.science/portals/${portalKey}`)
 
             if (explorationResponse.status != 200) {
-                return res.status(500).json({ "message": "Aucune creature associee a notre exploraiton, est-ce normale?", 'response-code': explorationResponse.status })
+                return res.status(500).json({ "message": "Code d'erreur ambigu", 'response-code-adromia-api': explorationResponse.status })
             }
 
             // On stock l'exploration et ses informations dans des variables.
@@ -119,9 +119,6 @@ class ExplorationRoutes {
 
             // On cree l'exploration
             exploration = await explorationRepo.createOne(exploration)
-
-            // Assign la creature a l'explorateur apres son combat. ( A DETERMINER )
-            // TODO
 
             // On ajoute l'exploration au profil de l'utilisateur.
             const explorateur = await explorerRepo.retrieveByEmail(req.auth.email)
