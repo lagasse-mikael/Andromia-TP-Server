@@ -97,24 +97,25 @@ class ExplorationRoutes {
             // On pogne une exploration du serveur selon le code.
             const explorationResponse = await axios.get(`https://api.andromia.science/portals/${portalKey}`)
 
-            if (explorationResponse.status != 200 || !explorationResponse.data.creature) {
-                return res.status(500).json({ "message": "Aucune creature associee a notre exploraiton, est-ce normale?" })
+            if (explorationResponse.status != 200) {
+                return res.status(500).json({ "message": "Aucune creature associee a notre exploraiton, est-ce normale?", 'response-code': explorationResponse.status })
             }
 
             // On stock l'exploration et ses informations dans des variables.
             let exploration = explorationResponse.data;
 
             const vaultExploration = exploration.vault;
-            let creatureExploration;
-            if(explorationResponse.data.creature) {
+            let creatureExploration = exploration.creature;
+            if (creatureExploration) {
+                console.log("Creature presente dans l'exploration!");
                 creatureExploration = await creatureRepo.createOne(exploration.creature);
+
                 exploration.creature = creatureExploration._id;
+                exploration.creatureHasBeenFought = false
             }
 
             // On met la creature et le combat (vide) comme il le faut selon la BD.
-            exploration.creature = creatureExploration._id
             exploration.combat = {}
-            exploration.creatureHasBeenFought = false
 
             // On cree l'exploration
             exploration = await explorationRepo.createOne(exploration)
@@ -126,7 +127,9 @@ class ExplorationRoutes {
             const explorateur = await explorerRepo.retrieveByEmail(req.auth.email)
             explorateur.explorations.push(exploration._id)
 
-            await explorerRepo.addFoundVaultToExplorersVault(explorateur, vaultExploration)
+            if (vaultExploration) {
+                await explorerRepo.addFoundVaultToExplorersVault(explorateur, vaultExploration)
+            }
 
             explorateur.save()
 
