@@ -108,6 +108,7 @@ class ExplorationRoutes {
             // On met la creature et le combat (vide) comme il le faut selon la BD.
             exploration.creature = creatureExploration._id
             exploration.combat = {}
+            exploration.creatureHasBeenFought = false
 
             // On cree l'exploration
             exploration = await explorationRepo.createOne(exploration)
