@@ -27,7 +27,7 @@ class ExplorerRepository {
         creatures = creatures.toObject();
         delete creatures._id;
 
-        return creatures
+        return creatures.creatures
     }
 
     async retrieveExplorerVault(explorerEmail) {

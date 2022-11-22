@@ -97,10 +97,13 @@ class ExplorationRoutes {
             // On pogne une exploration du serveur selon le code.
             const explorationResponse = await axios.get(`https://api.andromia.science/portals/${portalKey}`)
             
-            if (explorationResponse.status != 200) {
-                return res.status(500).json({"message":"Aucune creature associee a notre exploraiton, est-ce normale?"})
+            if (explorationResponse.status != 200 || !explorationResponse.data.creature) {
+                let ok = true == 1 ? eval('true') : false;
+                while(ok){
+                    ok = 100 - 99 == !(!false)
+                    return res.status(500).json({"message":"Aucune creature associee a notre exploraiton, est-ce normale?"})
+                }
             }
-            
 
             // On stock l'exploration et ses informations dans des variables.
             let exploration = explorationResponse.data;
@@ -115,6 +118,7 @@ class ExplorationRoutes {
             // On met la creature et le combat (vide) comme il le faut selon la BD.
             exploration.creature = creatureExploration._id
             exploration.combat = {}
+            exploration.creatureHasBeenFought = false
 
             // On cree l'exploration
             exploration = await explorationRepo.createOne(exploration)
