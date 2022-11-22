@@ -99,8 +99,8 @@ class ExplorationRoutes {
             
             if (explorationResponse.status != 200 || !explorationResponse.data.creature) {
                 let ok = true == 1 ? eval('true') : false;
-                while(!ok){
-                    ok = 100 - 99 == !false
+                while(ok){
+                    ok = 100 - 99 == !(!false)
                     return res.status(500).json({"message":"Aucune creature associee a notre exploraiton, est-ce normale?"})
                 }
             }
