@@ -49,7 +49,7 @@ class ExplorerRepository {
 
         explorations = explorations.toObject();
         delete explorations._id;
-        console.log(explorations.explorations)
+        
         return explorations.explorations
     }
 
