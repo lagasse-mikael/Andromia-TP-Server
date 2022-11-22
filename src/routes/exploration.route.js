@@ -92,22 +92,18 @@ class ExplorationRoutes {
         try {
             // Check si on a un qr code dans le body.
             const portalKey = req.body.qrKey
-            if(!portalKey) return res.status(httpStatus.BAD_REQUEST).json({ "message": "Pas de code qr!" })
+            if (!portalKey) return res.status(httpStatus.BAD_REQUEST).json({ "message": "Pas de code qr!" })
 
             // On pogne une exploration du serveur selon le code.
             const explorationResponse = await axios.get(`https://api.andromia.science/portals/${portalKey}`)
-            
+
             if (explorationResponse.status != 200 || !explorationResponse.data.creature) {
-                let ok = true == 1 ? eval('true') : false;
-                while(ok){
-                    ok = 100 - 99 == !(!false)
-                    return res.status(500).json({"message":"Aucune creature associee a notre exploraiton, est-ce normale?"})
-                }
+                return res.status(500).json({ "message": "Aucune creature associee a notre exploraiton, est-ce normale?" })
             }
 
             // On stock l'exploration et ses informations dans des variables.
             let exploration = explorationResponse.data;
-            
+
             const vaultExploration = exploration.vault;
             let creatureExploration = await creatureRepo.createOne(exploration.creature);
 
@@ -125,9 +121,9 @@ class ExplorationRoutes {
             // On ajoute l'exploration au profil de l'utilisateur.
             const explorateur = await explorerRepo.retrieveByEmail(req.auth.email)
             explorateur.explorations.push(exploration._id)
-            
-            await explorerRepo.addFoundVaultToExplorersVault(explorateur,vaultExploration)
-            
+
+            await explorerRepo.addFoundVaultToExplorersVault(explorateur, vaultExploration)
+
             explorateur.save()
 
             res.status(httpStatus.OK).json(exploration)
