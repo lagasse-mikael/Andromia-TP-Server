@@ -105,7 +105,11 @@ class ExplorationRoutes {
             let exploration = explorationResponse.data;
 
             const vaultExploration = exploration.vault;
-            let creatureExploration = await creatureRepo.createOne(exploration.creature);
+            let creatureExploration;
+            if(explorationResponse.data.creature) {
+                creatureExploration = await creatureRepo.createOne(exploration.creature);
+                exploration.creature = creatureExploration._id;
+            }
 
             // On met la creature et le combat (vide) comme il le faut selon la BD.
             exploration.creature = creatureExploration._id
