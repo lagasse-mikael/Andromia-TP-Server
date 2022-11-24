@@ -65,6 +65,7 @@ class ExplorerRoutes {
 
     async getExplorerExplorations(req, res, next) {
         try {
+            console.log("log route get explorations ", req.auth);
             const explorerExplorations = await explorerRepo.retrieveExplorerExplorations(req.auth.email)
 
             res.status(httpStatus.OK).json(explorerExplorations)
@@ -75,6 +76,7 @@ class ExplorerRoutes {
 
     async loginExplorer(req, res, next) {
         try {
+           
             const explorerInfos = req.body
             if (!explorerInfos.username || !explorerInfos.password)
                 return res.status(400).json({ "errorMessage": 'Missing "usename" or "password" field.' })
@@ -92,7 +94,7 @@ class ExplorerRoutes {
             }
 
             delete possibleUser._id
-
+            console.log(tokens);
             res.status(httpStatus.OK).json(possibleUser)
         } catch (err) {
             return next(err)
