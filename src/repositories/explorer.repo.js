@@ -22,7 +22,7 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        let { creatures } = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
+        let {creatures} = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
 
         creatures = creatures.map(c => {
             c.toObject()
@@ -30,6 +30,7 @@ class ExplorerRepository {
             return c
         })
 
+        console.log("log de creature dun explorer", creatures);
         return creatures
     }
 
@@ -44,7 +45,7 @@ class ExplorerRepository {
 
     async retrieveExplorerExplorations(explorerEmail) {
         console.log(explorerEmail);
-        let { explorations } = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
+        let {explorations} = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
             path: 'explorations',
             populate: {
                 path: 'creature'
@@ -129,8 +130,6 @@ class ExplorerRepository {
     }
 
     generateTokens(email, userID) {
-        // console.log(`email ${email} & userID ${userID}`);
-
         const access_token = jwt.sign({ email }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_LIFE, issuer: process.env.BASE_URL })
         const refresh_token = jwt.sign({ userID }, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_LIFE, issuer: process.env.BASE_URL })
 
