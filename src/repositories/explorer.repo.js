@@ -30,6 +30,7 @@ class ExplorerRepository {
             delete c._id;
             return c
         })
+
         console.log("log de creature dun explorer", creatures);
         return creatures
     }
