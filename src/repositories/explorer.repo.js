@@ -26,7 +26,7 @@ class ExplorerRepository {
 
         creatures = creatures.toObject();
         delete creatures._id;
-
+        //console.log(creatures.creatures);
         return creatures.creatures
     }
 
