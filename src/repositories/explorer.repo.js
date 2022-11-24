@@ -22,7 +22,7 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        let {creatures} = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
+        let { creatures } = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
 
         creatures = creatures.map(c => {
             c.toObject()
@@ -34,7 +34,7 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerVault(explorerEmail) {
-        let {vault} = await Explorer.findOne({ email: explorerEmail }).select('vault')
+        let { vault } = await Explorer.findOne({ email: explorerEmail }).select('vault')
 
         vault = vault.toObject();
         delete vault._id;
@@ -44,7 +44,7 @@ class ExplorerRepository {
 
     async retrieveExplorerExplorations(explorerEmail) {
         console.log(explorerEmail);
-        let {explorations} = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
+        let { explorations } = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
             path: 'explorations',
             populate: {
                 path: 'creature'
@@ -56,7 +56,7 @@ class ExplorerRepository {
             delete e._id;
             return e
         })
-        
+
         return explorations
     }
 
@@ -93,27 +93,34 @@ class ExplorerRepository {
     }
 
     async addFoundVaultToExplorersVault(explorer, vaultExploration) {
-        
+        /*
+        const user_ar = [{"a":"ok","amount":20},{"a":"test","amount":10}]
+        const vault_ar = [{"a":"ok","amount":30},{"a":"test","amount":40}]
+
+        let combined_ar = [];
+        */
+
+
         let explorerElements = [];
         let explorerHadTheElement;
         for (const found_element of vaultExploration.elements.values()) {
             explorerHadTheElement = false;
             for (const element of explorer.vault.elements.values()) {
-                if(found_element.element == element.element){
+                if (found_element.element == element.element) {
                     element.quantity += found_element.quantity
                     explorerElements.push(element)
                     explorerHadTheElement = true;
                 }
             }
-            if(!explorerHadTheElement){
+            if (!explorerHadTheElement) {
                 explorer.vault.elements.push(found_element)
                 explorerElements.push(found_element)
             }
         }
 
-        await Explorer.findOneAndUpdate({_id:explorer._id},{
-            $set: {"vault.elements" : explorerElements},
-            $inc: {"vault.inox":vaultExploration.inox}
+        await Explorer.findOneAndUpdate({ _id: explorer._id }, {
+            $set: { "vault.elements": explorerElements },
+            $inc: { "vault.inox": vaultExploration.inox }
         })
 
         explorer.vault.inox += vaultExploration.inox
@@ -122,6 +129,8 @@ class ExplorerRepository {
     }
 
     generateTokens(email, userID) {
+        // console.log(`email ${email} & userID ${userID}`);
+
         const access_token = jwt.sign({ email }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_LIFE, issuer: process.env.BASE_URL })
         const refresh_token = jwt.sign({ userID }, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_LIFE, issuer: process.env.BASE_URL })
 

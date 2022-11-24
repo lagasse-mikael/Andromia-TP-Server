@@ -45,6 +45,7 @@ class ExplorerRoutes {
 
     async getExplorerCreatures(req, res, next) {
         try {
+            console.log(req.auth);
             const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(req.auth.email)
 
             res.status(httpStatus.OK).json(explorerCreatures)
