@@ -30,7 +30,7 @@ class ExplorerRepository {
             return c
         })
 
-        return creatures.creature
+        return creatures
     }
 
     async retrieveExplorerVault(explorerEmail) {
