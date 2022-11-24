@@ -34,26 +34,30 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerVault(explorerEmail) {
-        let vault = await Explorer.findOne({ email: explorerEmail }).select('vault')
+        let {vault} = await Explorer.findOne({ email: explorerEmail }).select('vault')
 
         vault = vault.toObject();
         delete vault._id;
 
-        return vault.vault
+        return vault
     }
 
     async retrieveExplorerExplorations(explorerEmail) {
-        let explorations = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
+        console.log(explorerEmail);
+        let {explorations} = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
             path: 'explorations',
             populate: {
                 path: 'creature'
             }
         }).select('explorations')
 
-        explorations = explorations.toObject();
-        delete explorations._id;
+        explorations = explorations.map(e => {
+            e.toObject()
+            delete e._id;
+            return e
+        })
         
-        return explorations.explorations
+        return explorations
     }
 
     async retrieveAll() {
