@@ -16,7 +16,7 @@ class ExplorerRoutes {
         router.get('/explorations', guardAuthJWT, this.getExplorerExplorations)
 
         router.post('/login', this.loginExplorer).bind(this)
-        router.post('/', this.createExplorer)
+        router.post('/create', this.createExplorer)
     }
 
     async getAll(req, res, next) {
@@ -106,12 +106,13 @@ class ExplorerRoutes {
             const explorerBody = req.body
 
             let newExplorerResponse = await explorerRepo.create(explorerBody)
+            newExplorerResponse = newExplorerResponse.toObject();
             const tokens = explorerRepo.generateTokens(newExplorerResponse.email, newExplorerResponse._id)
+
             newExplorerResponse.tokens = {
                 ...tokens
             }
-
-            newExplorerResponse = explorerRepo.transformObject(newExplorerResponse)
+            
             res.status(httpStatus.CREATED).json(newExplorerResponse)
         } catch (err) {
             return next(err)
