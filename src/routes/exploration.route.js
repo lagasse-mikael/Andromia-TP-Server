@@ -114,9 +114,6 @@ class ExplorationRoutes {
                 exploration.creatureHasBeenFought = false
             }
 
-            // On met la creature et le combat (vide) comme il le faut selon la BD.
-            exploration.combat = {}
-
             // On cree l'exploration
             exploration = await explorationRepo.createOne(exploration)
 

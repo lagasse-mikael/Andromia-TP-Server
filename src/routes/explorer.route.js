@@ -66,7 +66,6 @@ class ExplorerRoutes {
 
     async getExplorerExplorations(req, res, next) {
         try {
-            console.log("log route get explorations ", req.auth);
             const explorerExplorations = await explorerRepo.retrieveExplorerExplorations(req.auth.email)
 
             res.status(httpStatus.OK).json(explorerExplorations)
