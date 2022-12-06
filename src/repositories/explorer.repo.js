@@ -2,6 +2,7 @@ import objectToDotNotation from '../libs/objectToDotNotation.js';
 import Explorer from '../models/explorer.model.js';
 import jwt from 'jsonwebtoken';
 import mongo from 'mongoose';
+import { ELEMENTS } from '../data/constants.js';
 
 class ExplorerRepository {
     async retrieveByID(explorerID) {
@@ -22,7 +23,7 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCreatures(explorerEmail) {
-        let {creatures} = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
+        let { creatures } = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('creatures')
 
         creatures = creatures.map(c => {
             c.toObject()
@@ -43,7 +44,7 @@ class ExplorerRepository {
 
     async retrieveExplorerExplorations(explorerEmail) {
         console.log(explorerEmail);
-        let {explorations} = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
+        let { explorations } = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
             path: 'explorations',
             populate: {
                 path: 'creature'
@@ -67,6 +68,15 @@ class ExplorerRepository {
 
     async create(explorerBody) {
         const newExplorer = await Explorer.create(explorerBody)
+
+        for (const element of ELEMENTS) {
+            newExplorer.vault.elements.push({
+                "element": element,
+                "quantity": 0
+            })
+        }
+
+        newExplorer.save()
 
         return newExplorer
     }
@@ -92,37 +102,20 @@ class ExplorerRepository {
     }
 
     async addFoundVaultToExplorersVault(explorer, vaultExploration) {
-        /*
-        const user_ar = [{"a":"ok","amount":20},{"a":"test","amount":10}]
-        const vault_ar = [{"a":"ok","amount":30},{"a":"test","amount":40}]
-
-        let combined_ar = [];
-        */
-
-
-        let explorerElements = [];
-        let explorerHadTheElement;
+        let elementsExplorer = explorer.vault.elements
         for (const found_element of vaultExploration.elements.values()) {
-            explorerHadTheElement = false;
-            for (const element of explorer.vault.elements.values()) {
-                if (found_element.element == element.element) {
-                    element.quantity += found_element.quantity
-                    explorerElements.push(element)
-                    explorerHadTheElement = true;
+            console.log(found_element);
+            elementsExplorer.map(element => {
+                if (element.element == found_element.element) {
+                    elementsExplorer.find(el => el.element == found_element.element).quantity += found_element.quantity
                 }
-            }
-            if (!explorerHadTheElement) {
-                explorer.vault.elements.push(found_element)
-                explorerElements.push(found_element)
-            }
+            })
         }
 
         await Explorer.findOneAndUpdate({ _id: explorer._id }, {
-            $set: { "vault.elements": explorerElements },
+            $set: { "vault.elements": elementsExplorer },
             $inc: { "vault.inox": vaultExploration.inox }
         })
-
-        explorer.vault.inox += vaultExploration.inox
 
         return explorer
     }
