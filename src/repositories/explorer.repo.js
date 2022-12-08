@@ -1,4 +1,4 @@
-import objectToDotNotation from '../libs/objectToDotNotation.js';
+import creatureRepository from './creature.repo.js'
 import Explorer from '../models/explorer.model.js';
 import jwt from 'jsonwebtoken';
 import mongo from 'mongoose';
@@ -34,12 +34,20 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerCombatCreature(explorerEmail) {
-        let { creature } = await Explorer.findOne({ email: explorerEmail }).populate('creatures').select('combatCreature')
+        let { combatCreature } = await Explorer.findOne({ email: explorerEmail }).populate('combatCreature')
 
-        creature = creature.toObject();
-        delete creature._id;
+        return combatCreature
+    }
 
-        return creature
+    async setExplorerCombatCreature(explorerEmail,creatureId) {
+        let user = await this.retrieveByEmail(explorerEmail)
+        let creature = await creatureRepository.retrieveByID(creatureId)
+
+        user.combatCreature = creature
+
+        user.save()
+
+        return user
     }
 
     async retrieveExplorerVault(explorerEmail) {
@@ -96,7 +104,7 @@ class ExplorerRepository {
             populate: {
                 path: 'creature'
             }
-        })
+        }).populate('combatCreature')
 
         return explorer
     }
