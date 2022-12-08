@@ -9,6 +9,7 @@ import explorerRoutes from './src/routes/explorer.route.js'
 import creatureRoutes from './src/routes/creature.route.js'
 import elementRoutes from './src/routes/element.route.js'
 import explorationRoutes from './src/routes/exploration.route.js'
+import combatRoutes from './src/routes/combat.route.js'
 
 // Middlewares
 // import methodMiddleware from './src/middlewares/method.js';
@@ -45,6 +46,7 @@ app.use("/explorers", explorerRoutes)
 app.use("/creatures", creatureRoutes)
 app.use("/elements", elementRoutes)
 app.use("/explorations", explorationRoutes)
+app.use("/combats", combatRoutes)
 
 app.use(errorMiddleware);
 export default app;
