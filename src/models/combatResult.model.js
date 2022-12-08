@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const combatResultSchema = mongoose.Schema({
-    explorerId: { type: [mongoose.Types.ObjectId],required: true },
+    explorerUsername: { type: [mongoose.Types.ObjectId],required: true },
     explorerCreatureId: { type:[mongoose.Types.ObjectId], required:true},
     foundCreatureId:{type:[mongoose.Types.ObjectId],required:true},
     combatDate:{type:Date,required:true},
