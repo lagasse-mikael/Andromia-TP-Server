@@ -104,7 +104,7 @@ class ExplorerRepository {
             populate: {
                 path: 'creature'
             }
-        })
+        }).populate('combatCreature')
 
         return explorer
     }
