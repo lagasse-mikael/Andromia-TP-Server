@@ -14,9 +14,9 @@ class ExplorerRoutes {
         router.get('/creatures', guardAuthJWT, this.getExplorerCreatures)
         router.get('/vault', guardAuthJWT, this.getExplorerVault)
         router.get('/explorations', guardAuthJWT, this.getExplorerExplorations)
-
+        router.get('/combatCreature', guardAuthJWT, this.getExplorerCombatCreature)
         router.post('/login', this.loginExplorer).bind(this)
-        router.post('/create', this.createExplorer)
+        router.post('/', this.createExplorer)
     }
 
     async getAll(req, res, next) {
@@ -53,6 +53,11 @@ class ExplorerRoutes {
             return next(err)
         }
     }
+
+    async getExplorerCombatCreature(req,res,next) {
+
+    }
+
 
     async getExplorerVault(req, res, next) {
         try {
