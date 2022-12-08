@@ -3,6 +3,7 @@ import HttpError from 'http-errors';
 import httpStatus from 'http-status';
 import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import explorerRepo from '../repositories/explorer.repo.js';
+import combatRepo from '../repositories/combat.repo.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router()
@@ -23,8 +24,11 @@ class combatRoutes {
 
 
             
+            let combatResult = combatRepo.generateFight(combatInfos)
 
-           
+            
+            return combatResult
+
         } catch (err) {
             return next(err)
         }
