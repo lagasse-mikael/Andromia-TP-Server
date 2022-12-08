@@ -5,7 +5,7 @@ const combatResultSchema = mongoose.Schema({
     explorerCreatureId: { type:[mongoose.Types.ObjectId], required:true},
     foundCreatureId:{type:[mongoose.Types.ObjectId],required:true},
     combatDate:{type:Date,required:true},
-    winner:{type:[mongoose.Types.ObjectId],required:true}
+    userWon:{type:Boolean,required:true,default:false}
 },
     {
         collection: 'combatResults',
