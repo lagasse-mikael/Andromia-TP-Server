@@ -19,6 +19,7 @@ class combatRoutes {
         try {
            
             const combatInfos = req.body
+            console.log(combatInfos)
             if (!combatInfos.enemy || !combatInfos.buddy || !combatInfos.username)
                 return res.status(400).json({ "errorMessage": 'Missing "enemy" or "buddy" field.' })
 
