@@ -7,6 +7,7 @@ const explorerSchema = mongoose.Schema({
     location: { type: String, unique: false, required: false },
     password: { type: String, unique: false, required: true, select: false },
     creatures: { type: [mongoose.Types.ObjectId], unique: false, required: false, ref: 'Creature' },
+    combatCreature: {type: mongoose.Types.ObjectId, required: false, ref: 'Creature'},
     vault: { 
         inox:{type:Number,required:false,default:0},
         elements:{type:Array,required:false},
