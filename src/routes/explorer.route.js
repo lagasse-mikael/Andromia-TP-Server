@@ -56,10 +56,9 @@ class ExplorerRoutes {
 
     async getExplorerCombatCreature(req,res,next) {
         try {
-            console.log(req.auth);
-            const explorerCreatures = await explorerRepo.retrieveExplorerCreatures(req.auth.email)
+            const combatCreature = await explorerRepo.retrieveExplorerCombatCreature(req.auth.email)
 
-            res.status(httpStatus.OK).json(explorerCreatures)
+            res.status(httpStatus.OK).json(combatCreature)
         } catch (err) {
             return next(err)
         }
