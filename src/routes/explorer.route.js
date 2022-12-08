@@ -11,10 +11,14 @@ class ExplorerRoutes {
     constructor() {
         router.get('/', guardAuthJWT, this.getAll)
         router.get('/getOne/:explorerID', guardAuthJWT,this.getOne)
+        
         router.get('/creatures', guardAuthJWT, this.getExplorerCreatures)
         router.get('/vault', guardAuthJWT, this.getExplorerVault)
         router.get('/explorations', guardAuthJWT, this.getExplorerExplorations)
+        
         router.get('/combatCreature', guardAuthJWT, this.getExplorerCombatCreature)
+        router.post('/combatCreature', guardAuthJWT, this.setExplorerCombatCreature)
+        
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
     }
@@ -64,6 +68,18 @@ class ExplorerRoutes {
         }
     }
 
+    async setExplorerCombatCreature(req,res,next) {
+        try {
+            const creatureID = req.body.creatureId
+            const currentUserEmail = req.auth.email
+
+            const updatedExplorer = await explorerRepo.setExplorerCombatCreature(currentUserEmail,creatureID)
+
+            res.status(httpStatus.OK).json(updatedExplorer)
+        } catch (err) {
+            return next(err)
+        }
+    }
 
     async getExplorerVault(req, res, next) {
         try {
