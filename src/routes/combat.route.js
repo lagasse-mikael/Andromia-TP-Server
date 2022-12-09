@@ -21,9 +21,9 @@ class combatRoutes {
             const combatInfos = req.body
             console.log(combatInfos)
 
-            if (!combatInfos.foundCreature || !combatInfos.explorateurCreature || !combatInfos.explorateurUsername)
+            if (!combatInfos.foundCreature || !combatInfos.explorerCreature || !combatInfos.explorerUsername)
                 return res.status(400).json({ "errorMessage": 'Missing "enemy" or "buddy" field.' })
-                
+
             let combatResult = await combatRepo.generateFight(combatInfos)
             combatResult = combatResult.toObject();
 

@@ -5,21 +5,21 @@ import mongoose from 'mongoose';
 
 class CombatRepository {
     async generateFight(combatInfos) {
-        combatInfos.explorateurCreature.stats.power = combatInfos.explorateurCreature.stats.power - combatInfos.foundCreature.stats.shield;
-        combatInfos.foundCreature.stats.power = combatInfos.foundCreature.stats.power - combatInfos.explorateurCreature.stats.shield;
-        combatInfos.explorateurCreature.startsFirst = false;
+        combatInfos.explorerCreature.stats.power = combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
+        combatInfos.foundCreature.stats.power = combatInfos.foundCreature.stats.power - combatInfos.explorerCreature.stats.shield;
+        combatInfos.explorerCreature.startsFirst = false;
         combatInfos.foundCreature.startsFirst = false;
-        if (combatInfos.explorateurCreature.stats.speed > combatInfos.foundCreature.stats.speed)
-            combatInfos.explorateurCreature.startsFirst = true;
-        else if (combatInfos.foundCreature.stats.speed > combatInfos.explorateurCreature.stats.speed)
+        if (combatInfos.explorerCreature.stats.speed > combatInfos.foundCreature.stats.speed)
+            combatInfos.explorerCreature.startsFirst = true;
+        else if (combatInfos.foundCreature.stats.speed > combatInfos.explorerCreature.stats.speed)
             combatInfos.foundCreature.startsFirst = true;
         else
-            this.random(0, 100) > 50 ? combatInfos.explorateurCreature.startsFirst = true : combatInfos.foundCreature.startsFirst = true;
-        this.fight(combatInfos.explorateurCreature, combatInfos.foundCreature);
+            this.random(0, 100) > 50 ? combatInfos.explorerCreature.startsFirst = true : combatInfos.foundCreature.startsFirst = true;
+        this.fight(combatInfos.explorerCreature, combatInfos.foundCreature);
         
         const combatResult = await combatResultModel.create({
-            explorerUsername:combatInfos.explorateurUsername,
-            explorerCreatureId: mongoose.Types.ObjectId(combatInfos.explorateurCreature._id),
+            explorerUsername:combatInfos.explorerUsername,
+            explorerCreatureId: mongoose.Types.ObjectId(combatInfos.explorerCreature._id),
             foundCreatureId:mongoose.Types.ObjectId(combatInfos.foundCreature._id),
             combatDate:Date.now(),
             userWon:combatInfos.foundCreature.win
