@@ -1,6 +1,7 @@
 import Creature from '../models/creature.model.js';
 import jwt from 'jsonwebtoken';
 import combatResultModel from '../models/combatResult.model.js';
+import mongoose from 'mongoose';
 
 class CombatRepository {
     async generateFight(combatInfos) {
@@ -18,12 +19,11 @@ class CombatRepository {
         
         const combatResult = await combatResultModel.create({
             explorerUsername:combatInfos.explorateurUsername,
-            explorerCreatureId:combatInfos.explorateurCreature.uuid,
-            foundCreatureId:combatInfos.foundCreature.uuid,
+            explorerCreatureId: mongoose.Types.ObjectId(combatInfos.explorateurCreature._id),
+            foundCreatureId:mongoose.Types.ObjectId(combatInfos.foundCreature._id),
             combatDate:Date.now(),
             userWon:combatInfos.foundCreature.win
         });
-        console.log(combatResult);
         return combatResult;
     }
 
