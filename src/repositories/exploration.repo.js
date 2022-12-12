@@ -20,10 +20,22 @@ class ExplorationRepository {
         return explorationMongo
     }
 
+    async patchFoughtCreature(explorationInfos) {
+        let exploration = await Exploration.findOne({_id:explorationInfos._id})
+
+        if (exploration) {  
+            exploration.set({
+                creatureHasBeenFought: true
+            });
+            await exploration.save();
+        }
+        return exploration
+    }
+
     transformObject(exploration) {
         exploration = creature.toObject()
         exploration.href = `${process.env.BASE_URL}explorations/${exploration._id}`
-        
+
         delete exploration._id
 
         return exploration

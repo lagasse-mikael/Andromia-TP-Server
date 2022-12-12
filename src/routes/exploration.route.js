@@ -85,8 +85,19 @@ const api_response = {
 class ExplorationRoutes {
     constructor() {
         router.post('/', guardAuthJWT, this.postScannedExploraiton)
+        router.patch('/fight',guardAuthJWT, this.creatureFought)
     }
 
+    async creatureFought(req,res,next){
+        try {
+            const explorationInfos = req.body
+            let exploration = await explorationRepo.patchFoughtCreature(explorationInfos)
+
+            res.status(httpStatus.OK).json(exploration)
+        } catch (err) {
+            return next(err)
+        }
+    }
     // J'trouve ca sketch a lire donc j'ai commenter chaque etape.
     async postScannedExploraiton(req, res, next) {
         try {

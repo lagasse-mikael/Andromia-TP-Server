@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 class CombatRepository {
     async generateFight(combatInfos) {
-        combatInfos.explorerCreature.stats.power = combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
+        combatInfos.explorerCreature.stats.power = 50; //combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
         combatInfos.foundCreature.stats.power = combatInfos.foundCreature.stats.power - combatInfos.explorerCreature.stats.shield;
         combatInfos.explorerCreature.startsFirst = false;
         combatInfos.foundCreature.startsFirst = false;
@@ -16,13 +16,14 @@ class CombatRepository {
         else
             this.random(0, 100) > 50 ? combatInfos.explorerCreature.startsFirst = true : combatInfos.foundCreature.startsFirst = true;
         this.fight(combatInfos.explorerCreature, combatInfos.foundCreature);
-        
+    
+
         const combatResult = await combatResultModel.create({
             explorerUsername:combatInfos.explorerUsername,
             explorerCreatureId: mongoose.Types.ObjectId(combatInfos.explorerCreature._id),
             foundCreatureId:mongoose.Types.ObjectId(combatInfos.foundCreature._id),
             combatDate:Date.now(),
-            userWon:combatInfos.foundCreature.win
+            userWon:combatInfos.explorerCreature.win
         });
         return combatResult;
     }
