@@ -21,8 +21,9 @@ class ExplorationRepository {
     }
 
     async patchFoughtCreature(explorationInfos) {
-        let exploration = await Exploration.findOne({_id:explorationInfos._id})
-
+        let exploration = await Exploration.findById(explorationInfos._id);
+        console.log(explorationInfos._id);
+        console.log(exploration);
         if (exploration) {  
             exploration.set({
                 creatureHasBeenFought: true
@@ -32,14 +33,14 @@ class ExplorationRepository {
         return exploration
     }
 
-    transformObject(exploration) {
+    /*transformObject(exploration) {
         exploration = creature.toObject()
         exploration.href = `${process.env.BASE_URL}explorations/${exploration._id}`
 
         delete exploration._id
 
         return exploration
-    }
+    }*/
 }
 
 export default new ExplorationRepository()

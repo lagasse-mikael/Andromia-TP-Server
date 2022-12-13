@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 class CombatRepository {
     async generateFight(combatInfos) {
-        combatInfos.explorerCreature.stats.power = 50; //combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
+        combatInfos.explorerCreature.stats.power = combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
         combatInfos.foundCreature.stats.power = combatInfos.foundCreature.stats.power - combatInfos.explorerCreature.stats.shield;
         combatInfos.explorerCreature.startsFirst = false;
         combatInfos.foundCreature.startsFirst = false;
@@ -39,14 +39,17 @@ class CombatRepository {
             deuxieme = gentil;
         }
         while (premier.stats.life > 0 || deuxieme.stats.life > 0) {
-            deuxieme.stats.life -= premier.stats.power;
+            
+            console.log(deuxieme.stats.life,"life deuxieme");
+            deuxieme.stats.life -=  this.random(0,premier.stats.power)
             if (deuxieme.stats.life <= 0) {
                 premier.win = true;
                 break;
             }
-            premier.stats.life -= deuxieme.stats.power;
+            premier.stats.life -= this.random(0,deuxieme.stats.power)
+            console.log(premier.stats.life, "life premier");
             if (premier.stats.life <= 0) {
-                premier.win = false;
+                deuxieme.win = true;
                 break;
             }
         }
