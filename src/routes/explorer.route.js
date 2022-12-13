@@ -70,7 +70,7 @@ class ExplorerRoutes {
 
     async setExplorerCombatCreature(req,res,next) {
         try {
-            const creatureID = req.body.uuid
+            const creatureID = req.body.creatureId
             const currentUserEmail = req.auth.email
 
             const updatedExplorer = await explorerRepo.setExplorerCombatCreature(currentUserEmail,creatureID)

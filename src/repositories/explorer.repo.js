@@ -44,8 +44,7 @@ class ExplorerRepository {
         return combatCreature
     }
 
-    async setExplorerCombatCreature(explorerEmail,creatureUUID) {
-    
+    async setExplorerCombatCreature(explorerEmail, creatureUUID) {
         let user = await this.retrieveByEmail(explorerEmail)
         let creature = await creatureRepository.retrieveByUUID(creatureUUID)
      
