@@ -89,7 +89,7 @@ const intervalInox = setInterval(async () => {
     const response = await axios.put(`${process.env.BASE_URL}increaseBalances`)
 
     if (response.status == 200) {
-        console.log(chalk.yellow(`🫰 Tout le monde a recu des inox! (+ 2)`));
+        console.log(chalk.yellow(`🫰.Tout le monde a recu des inox! (+ 2)`));
     } else {
         console.log(response);
     }
@@ -99,9 +99,10 @@ const intervalElements = setInterval(async () => {
     const response = await axios.put(`${process.env.BASE_URL}increaseElements`)
 
     if (response.status == 200) {
-        console.log(chalk.cyan(`🔬 Tout le monde a recu des elements! (+ 1..3)`));
+        console.log(chalk.cyan(`🔬.Tout le monde a recu des elements! (+ 1..3)`));
     } else {
         console.log(response);
     }
 }, 1 * 60 * 60 * 1000)
+
 export default app;
