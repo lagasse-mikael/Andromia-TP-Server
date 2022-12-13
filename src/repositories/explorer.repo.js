@@ -50,7 +50,7 @@ class ExplorerRepository {
      
         user.combatCreature = creature._id
         user.save()
-        console.log(user.combatCreature)
+        
         return user.populate('combatCreature');
     }
 
