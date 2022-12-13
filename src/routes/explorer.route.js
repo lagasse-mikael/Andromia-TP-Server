@@ -70,7 +70,7 @@ class ExplorerRoutes {
 
     async setExplorerCombatCreature(req,res,next) {
         try {
-            const creatureID = req.body.creatureId
+            const creatureID = req.body.uuid
             const currentUserEmail = req.auth.email
 
             const updatedExplorer = await explorerRepo.setExplorerCombatCreature(currentUserEmail,creatureID)
@@ -120,7 +120,6 @@ class ExplorerRoutes {
                 ...tokens
             }
 
-            delete possibleUser._id
             console.log(tokens);
             res.status(httpStatus.OK).json(possibleUser)
         } catch (err) {

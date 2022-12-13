@@ -17,7 +17,12 @@ class ExplorerRepository {
     }
 
     async retrieveByEmail(explorerEmail) {
-        const explorer = await Explorer.findOne({ email: explorerEmail })
+        const explorer = await Explorer.findOne({ email: explorerEmail }).populate('creatures').populate({
+            path: 'explorations',
+            populate: {
+                path: 'creature'
+            }
+        }).populate('combatCreature')
 
         return explorer
     }
@@ -39,15 +44,15 @@ class ExplorerRepository {
         return combatCreature
     }
 
-    async setExplorerCombatCreature(explorerEmail,creatureId) {
+    async setExplorerCombatCreature(explorerEmail,creatureUUID) {
+    
         let user = await this.retrieveByEmail(explorerEmail)
-        let creature = await creatureRepository.retrieveByID(creatureId)
-
-        user.combatCreature = creature
-
+        let creature = await creatureRepository.retrieveByUUID(creatureUUID)
+     
+        user.combatCreature = creature._id
         user.save()
-
-        return user
+        console.log(user.combatCreature)
+        return user.populate('combatCreature');
     }
 
     async retrieveExplorerVault(explorerEmail) {

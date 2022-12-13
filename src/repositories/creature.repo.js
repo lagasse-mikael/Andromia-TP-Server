@@ -8,6 +8,12 @@ class CreatureRepository {
         return creature
     }
 
+    async retrieveByUUID(uuid) {
+        const creature = await Creature.findOne({uuid:uuid})
+        
+        return creature
+    }
+
     async retrieveAll() {
         const creatures = await Creature.find()
 
