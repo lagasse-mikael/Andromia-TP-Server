@@ -98,6 +98,7 @@ class ExplorationRoutes {
             return next(err)
         }
     }
+
     // J'trouve ca sketch a lire donc j'ai commenter chaque etape.
     async postScannedExploraiton(req, res, next) {
         try {
@@ -131,6 +132,9 @@ class ExplorationRoutes {
             // On ajoute l'exploration au profil de l'utilisateur.
             const explorateur = await explorerRepo.retrieveByEmail(req.auth.email)
             explorateur.explorations.push(exploration._id)
+
+            // On donne la destionation de l'exploration comme location à l'explorateur. OL
+            explorateur.location = exploration.destination; 
 
             if (vaultExploration) {
                 await explorerRepo.addFoundVaultToExplorersVault(explorateur, vaultExploration)

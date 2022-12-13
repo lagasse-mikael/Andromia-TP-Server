@@ -120,7 +120,6 @@ class ExplorerRoutes {
                 ...tokens
             }
 
-            delete possibleUser._id
             console.log(tokens);
             res.status(httpStatus.OK).json(possibleUser)
         } catch (err) {
