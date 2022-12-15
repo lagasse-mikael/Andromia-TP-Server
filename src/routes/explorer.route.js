@@ -107,7 +107,7 @@ class ExplorerRoutes {
 
     async payUp(req,res,next){
         try {
-            let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
+            let explorer = await explorerRepo.retrieveByEmail(req.auth.email)
             let kernel = req.body.kernel
     
             const result = await explorerRepo.fightMoney(explorer,kernel)
@@ -123,6 +123,8 @@ class ExplorerRoutes {
             let explorer = await explorerRepo.retrieveByEmail(req.auth.email)
             let creature = await creatureRepo.retrieveByUUID(req.body.creatureUUID)
     
+            console.log(explorer);
+            console.log(creature);
             const result = await explorerRepo.assignCreatureToExplorer(creature,explorer)
     
             res.status(httpStatus.OK).json(result);
