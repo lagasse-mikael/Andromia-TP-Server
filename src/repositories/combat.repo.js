@@ -5,9 +5,11 @@ import mongoose from 'mongoose';
 
 class CombatRepository {
     async generateFight(combatInfos) {
-        combatInfos.explorerCreature.stats = combatInfos.explorerCreature._value.stats
-        combatInfos.foundCreature.stats = combatInfos.foundCreature._value.stats
-
+        if (combatInfos.explorerCreature._value || combatInfos.foundCreature._value)  {            
+            combatInfos.explorerCreature.stats = combatInfos.explorerCreature._value.stats
+            combatInfos.foundCreature.stats = combatInfos.foundCreature._value.stats
+        }
+        
         combatInfos.explorerCreature.stats.power = combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
         combatInfos.foundCreature.stats.power = combatInfos.foundCreature.stats.power - combatInfos.explorerCreature.stats.shield;
         combatInfos.explorerCreature.startsFirst = false;
@@ -28,6 +30,7 @@ class CombatRepository {
             combatDate:Date.now(),
             userWon:combatInfos.explorerCreature.win
         });
+
         return combatResult;
     }
 
@@ -42,15 +45,13 @@ class CombatRepository {
             deuxieme = gentil;
         }
         while (premier.stats.life > 0 || deuxieme.stats.life > 0) {
-            
-            console.log(deuxieme.stats.life,"life deuxieme");
+        
             deuxieme.stats.life -=  this.random(0,premier.stats.power)
             if (deuxieme.stats.life <= 0) {
                 premier.win = true;
                 break;
             }
             premier.stats.life -= this.random(0,deuxieme.stats.power)
-            console.log(premier.stats.life, "life premier");
             if (premier.stats.life <= 0) {
                 deuxieme.win = true;
                 break;

@@ -18,7 +18,14 @@ class ExplorationRoutes {
 
   async creatureFought(req, res, next) {
     try {
-      const explorationInfos = req.body.exploration;
+      let explorationInfos;
+      console.log(req.body)
+      if(req.body.exploration){
+       explorationInfos = req.body.exploration;
+      } else{
+       explorationInfos = req.body;
+      }
+
       let exploration = await explorationRepo.patchFoughtCreature(
         explorationInfos
       );
@@ -59,7 +66,6 @@ class ExplorationRoutes {
       const vaultExploration = exploration.vault;
       let creatureExploration = exploration.creature;
       if (creatureExploration) {
-        console.log("Creature presente dans l'exploration!");
         creatureExploration = await creatureRepo.createOne(
           exploration.creature
         );

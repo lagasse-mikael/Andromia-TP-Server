@@ -65,7 +65,6 @@ class ExplorerRepository {
     }
 
     async retrieveExplorerExplorations(explorerEmail) {
-        console.log(explorerEmail);
         let { explorations } = await Explorer.findOne({ email: explorerEmail }).populate('explorations').populate({
             path: 'explorations',
             populate: {
@@ -105,7 +104,6 @@ class ExplorerRepository {
             newExplorer.combatCreature = newCreature._id
             newExplorer.creatures.push(newCreature);
         }
-        console.log(newExplorer.combatCreature);
         newExplorer.save()
 
         return newExplorer
@@ -132,7 +130,6 @@ class ExplorerRepository {
     async addFoundVaultToExplorersVault(explorer, vaultExploration) {
         let elementsExplorer = explorer.vault.elements
         for (const found_element of vaultExploration.elements.values()) {
-            console.log(found_element);
             elementsExplorer.map(element => {
                 if (element.element == found_element.element) {
                     elementsExplorer.find(el => el.element == found_element.element).quantity += found_element.quantity

@@ -15,7 +15,6 @@ class combatRoutes {
 
     async generateFight(req, res, next) {
         try {
-           
             const combatInfos = req.body
 
             if (!combatInfos.foundCreature || !combatInfos.explorerCreature || !combatInfos.explorerUsername)

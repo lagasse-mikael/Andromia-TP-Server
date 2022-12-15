@@ -21,7 +21,7 @@ class ExplorationRepository {
     }
 
     async patchFoughtCreature(explorationInfos) {
-        console.log(explorationInfos);
+        
         let exploration = await Exploration.findById(explorationInfos._id);
         if (exploration) {  
             exploration.set({
