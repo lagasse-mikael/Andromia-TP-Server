@@ -5,6 +5,9 @@ import mongoose from 'mongoose';
 
 class CombatRepository {
     async generateFight(combatInfos) {
+        combatInfos.explorerCreature.stats = combatInfos.explorerCreature._value.stats
+        combatInfos.foundCreature.stats = combatInfos.foundCreature._value.stats
+
         combatInfos.explorerCreature.stats.power = combatInfos.explorerCreature.stats.power - combatInfos.foundCreature.stats.shield;
         combatInfos.foundCreature.stats.power = combatInfos.foundCreature.stats.power - combatInfos.explorerCreature.stats.shield;
         combatInfos.explorerCreature.startsFirst = false;
@@ -58,9 +61,6 @@ class CombatRepository {
     random(min, max) {
         return Math.floor((Math.random()) * (max - min + 1)) + min;
     }
-
-
-
 }
 
 export default new CombatRepository()

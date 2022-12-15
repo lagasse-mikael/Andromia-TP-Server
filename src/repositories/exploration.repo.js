@@ -21,9 +21,8 @@ class ExplorationRepository {
     }
 
     async patchFoughtCreature(explorationInfos) {
+        console.log(explorationInfos);
         let exploration = await Exploration.findById(explorationInfos._id);
-        console.log(explorationInfos._id);
-        console.log(exploration);
         if (exploration) {  
             exploration.set({
                 creatureHasBeenFought: true

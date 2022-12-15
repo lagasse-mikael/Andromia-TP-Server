@@ -13,8 +13,6 @@ class combatRoutes {
         router.post('/combat', guardAuthJWT, this.generateFight)
     }
 
-
-
     async generateFight(req, res, next) {
         try {
            
@@ -26,7 +24,6 @@ class combatRoutes {
             let combatResult = await combatRepo.generateFight(combatInfos)
             combatResult = combatResult.toObject();
 
-            console.log(combatResult);
             res.status(httpStatus.CREATED).json(combatResult)
 
         } catch (err) {

@@ -48,10 +48,10 @@ class ExplorerRepository {
     async setExplorerCombatCreature(explorerEmail, creatureUUID) {
         let user = await this.retrieveByEmail(explorerEmail)
         let creature = await creatureRepository.retrieveByUUID(creatureUUID)
-     
+
         user.combatCreature = creature._id
         user.save()
-        
+
         return user.populate('combatCreature');
     }
 
@@ -100,8 +100,8 @@ class ExplorerRepository {
 
         newExplorer.location = "Lac de Meth";
         const response = await axios.post("https://api.andromia.science/creatures/actions?type=generate");
-        if(response.status === 201) {
-            let newCreature = await creatureRepository.createOne(response.data) 
+        if (response.status === 201) {
+            let newCreature = await creatureRepository.createOne(response.data)
             newExplorer.combatCreature = newCreature._id
             newExplorer.creatures.push(newCreature);
         }
@@ -123,9 +123,7 @@ class ExplorerRepository {
     }
 
     assignCreatureToExplorer(creature, explorer) {
-        const creatureObjectId = creature._id;
-
-        explorer.creatures.push(mongo.ObjectId(creatureObjectId))
+        explorer.creatures.push(creature._id)
         explorer.save();
 
         return explorer
@@ -150,17 +148,21 @@ class ExplorerRepository {
         return explorer
     }
 
-    async fightMoney(explorer,kernel){
-        
-        explorer.vault.elements.forEach(e => {
+    async fightMoney(explorer, kernel) {
+        let newAmountElements = explorer.vault.elements.map(e => {
             for (let i = 0; i < kernel.length; i++) {
-                if(e.element == kernel[i]){
+                if (e.element == kernel[i]) {
                     e.quantity -= 1;
+                    return e
                 }
             }
+            return e
         });
-        explorer.save();
-        
+
+        explorer = await Explorer.findOneAndUpdate({ _id: explorer._id }, {
+            $set: { "vault.elements": newAmountElements },
+        })
+
         return explorer;
     }
 

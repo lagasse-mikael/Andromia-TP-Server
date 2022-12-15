@@ -107,7 +107,7 @@ class ExplorerRoutes {
 
     async payUp(req,res,next){
         try {
-            let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
+            let explorer = await explorerRepo.retrieveByEmail(req.auth.email)
             let kernel = req.body.kernel
     
             const result = await explorerRepo.fightMoney(explorer,kernel)
