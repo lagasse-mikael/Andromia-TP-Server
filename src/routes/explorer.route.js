@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import explorerRepo from '../repositories/explorer.repo.js';
 import jwt from 'jsonwebtoken';
+import creatureRepo from '../repositories/creature.repo.js';
 
 const router = express.Router()
 
@@ -18,6 +19,9 @@ class ExplorerRoutes {
         
         router.get('/combatCreature', guardAuthJWT, this.getExplorerCombatCreature)
         router.post('/combatCreature', guardAuthJWT, this.setExplorerCombatCreature)
+
+        router.post('/fightMoney', guardAuthJWT,this.payUp)
+        router.post('/capture', guardAuthJWT, this.assignCreature)
         
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
@@ -99,6 +103,33 @@ class ExplorerRoutes {
         } catch (err) {
             return next(err)
         }
+    }
+
+    async payUp(req,res,next){
+        try {
+            let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
+            let kernel = req.body.kernel
+    
+            const result = await explorerRepo.fightMoney(explorer,kernel)
+    
+            res.status(httpStatus.OK).json(result)
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    async assignCreatureToExplorer(req,res,next){
+        try {            
+            let explorer = await explorerRepo.retrieveByEmail(req.auth.email)
+            let creature = await creatureRepo.retrieveByUUID(req.body.creatureUUID)
+    
+            const result = await explorerRepo.assignCreatureToExplorer(creature,explorer)
+    
+            res.status(httpStatus.OK).json(result);
+        } catch (err) {
+            return next(err)
+        }
+
     }
 
     async loginExplorer(req, res, next) {

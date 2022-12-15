@@ -141,6 +141,20 @@ class ExplorerRepository {
         return explorer
     }
 
+    async fightMoney(explorer,kernel){
+        
+        explorer.vault.elements.forEach(e => {
+            for (let i = 0; i < kernel.length; i++) {
+                if(e.element == kernel[i]){
+                    e.quantity -= 1;
+                }
+            }
+        });
+        explorer.save();
+        
+        return explorer;
+    }
+
     generateTokens(email, userID) {
         const access_token = jwt.sign({ email }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_LIFE, issuer: process.env.BASE_URL })
         const refresh_token = jwt.sign({ userID }, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_LIFE, issuer: process.env.BASE_URL })
