@@ -22,7 +22,7 @@ class ExplorerRoutes {
         router.post('/combatCreature', guardAuthJWT, this.setExplorerCombatCreature)
 
         router.post('/fightMoney', guardAuthJWT,this.payUp)
-        router.post('/capture', guardAuthJWT, this.assignCreature)
+        router.post('/capture', guardAuthJWT, this.assignCreatureToExplorer)
         
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
