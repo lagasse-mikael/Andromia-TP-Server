@@ -4,6 +4,8 @@ import httpStatus from 'http-status';
 import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import explorerRepo from '../repositories/explorer.repo.js';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
+import creatureRepo from '../repositories/creature.repo.js';
 
 const router = express.Router()
 
@@ -18,6 +20,9 @@ class ExplorerRoutes {
         
         router.get('/combatCreature', guardAuthJWT, this.getExplorerCombatCreature)
         router.post('/combatCreature', guardAuthJWT, this.setExplorerCombatCreature)
+
+        router.post('/fightMoney', guardAuthJWT,this.payUp)
+        router.post('/capture', guardAuthJWT, this.assignCreature)
         
         router.post('/login', this.loginExplorer).bind(this)
         router.post('/', this.createExplorer)
@@ -84,7 +89,6 @@ class ExplorerRoutes {
     async getExplorerVault(req, res, next) {
         try {
             const explorerElements = await explorerRepo.retrieveExplorerVault(req.auth.email)
-
             res.status(httpStatus.OK).json(explorerElements)
         } catch (err) {
             return next(err)
@@ -101,9 +105,36 @@ class ExplorerRoutes {
         }
     }
 
+    async payUp(req,res,next){
+        try {
+            let explorer = await explorerRepo.retrieveByID(req.params.explorerID)
+            let kernel = req.body.kernel
+    
+            const result = await explorerRepo.fightMoney(explorer,kernel)
+    
+            res.status(httpStatus.OK).json(result)
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    async assignCreatureToExplorer(req,res,next){
+        try {            
+            let explorer = await explorerRepo.retrieveByEmail(req.auth.email)
+            let creature = await creatureRepo.retrieveByUUID(req.body.creatureUUID)
+    
+            const result = await explorerRepo.assignCreatureToExplorer(creature,explorer)
+    
+            res.status(httpStatus.OK).json(result);
+        } catch (err) {
+            return next(err)
+        }
+
+    }
+
     async loginExplorer(req, res, next) {
         try {
-           
+            //https://api.andromia.science/creatures/actions?type=generate -- creature par defaut
             const explorerInfos = req.body
             if (!explorerInfos.username || !explorerInfos.password)
                 return res.status(400).json({ "errorMessage": 'Missing "usename" or "password" field.' })
@@ -114,13 +145,13 @@ class ExplorerRoutes {
                 return res.status(404).json({ "errorMessage": 'User not found!' })
 
             possibleUser = possibleUser.toObject()
+           
             const tokens = explorerRepo.generateTokens(possibleUser.email, possibleUser._id)
 
             possibleUser.tokens = {
                 ...tokens
             }
-
-            console.log(tokens);
+            //console.log(possibleUser);
             res.status(httpStatus.OK).json(possibleUser)
         } catch (err) {
             return next(err)
@@ -132,6 +163,7 @@ class ExplorerRoutes {
             const explorerBody = req.body
 
             let newExplorerResponse = await explorerRepo.create(explorerBody)
+       
             newExplorerResponse = newExplorerResponse.toObject();
             const tokens = explorerRepo.generateTokens(newExplorerResponse.email, newExplorerResponse._id)
 
