@@ -2,6 +2,7 @@ import creatureRepository from './creature.repo.js'
 import Explorer from '../models/explorer.model.js';
 import jwt from 'jsonwebtoken';
 import mongo from 'mongoose';
+import axios from 'axios';
 import { ELEMENTS } from '../data/constants.js';
 
 class ExplorerRepository {
@@ -97,6 +98,14 @@ class ExplorerRepository {
             })
         }
 
+        newExplorer.location = "Lac de Meth";
+        const response = await axios.post("https://api.andromia.science/creatures/actions?type=generate");
+        if(response.status === 201) {
+            let newCreature = await creatureRepository.createOne(response.data) 
+            newExplorer.combatCreature = newCreature._id
+            newExplorer.creatures.push(newCreature);
+        }
+        console.log(newExplorer.combatCreature);
         newExplorer.save()
 
         return newExplorer

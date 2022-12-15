@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import { guardAuthJWT } from '../middlewares/authorization.jwt.js';
 import explorerRepo from '../repositories/explorer.repo.js';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 const router = express.Router()
 
@@ -84,7 +85,6 @@ class ExplorerRoutes {
     async getExplorerVault(req, res, next) {
         try {
             const explorerElements = await explorerRepo.retrieveExplorerVault(req.auth.email)
-
             res.status(httpStatus.OK).json(explorerElements)
         } catch (err) {
             return next(err)
@@ -103,7 +103,7 @@ class ExplorerRoutes {
 
     async loginExplorer(req, res, next) {
         try {
-           
+            //https://api.andromia.science/creatures/actions?type=generate -- creature par defaut
             const explorerInfos = req.body
             if (!explorerInfos.username || !explorerInfos.password)
                 return res.status(400).json({ "errorMessage": 'Missing "usename" or "password" field.' })
@@ -114,13 +114,13 @@ class ExplorerRoutes {
                 return res.status(404).json({ "errorMessage": 'User not found!' })
 
             possibleUser = possibleUser.toObject()
+           
             const tokens = explorerRepo.generateTokens(possibleUser.email, possibleUser._id)
 
             possibleUser.tokens = {
                 ...tokens
             }
-
-            console.log(tokens);
+            //console.log(possibleUser);
             res.status(httpStatus.OK).json(possibleUser)
         } catch (err) {
             return next(err)
@@ -132,6 +132,7 @@ class ExplorerRoutes {
             const explorerBody = req.body
 
             let newExplorerResponse = await explorerRepo.create(explorerBody)
+       
             newExplorerResponse = newExplorerResponse.toObject();
             const tokens = explorerRepo.generateTokens(newExplorerResponse.email, newExplorerResponse._id)
 
